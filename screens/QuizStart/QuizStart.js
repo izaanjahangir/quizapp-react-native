@@ -5,6 +5,7 @@ import GeneralStyles from '../GeneralStyles';
 import { CheckBox, Divider, Badge, Icon } from 'react-native-elements';
 import Styles from './Styles';
 import Trivia from '../../config/Trivia';
+import { StackActions, NavigationActions } from 'react-navigation';
 
 export default class QuizStart extends Component {
     constructor() {
@@ -14,7 +15,8 @@ export default class QuizStart extends Component {
             isLoading: true,
             questions: null,
             currentIndex: 0,
-            selectAnswerIndex: ''
+            selectAnswerIndex: '',
+            score: 0
         }
 
         this.validateNextButton = this.validateNextButton.bind(this);
@@ -54,7 +56,7 @@ export default class QuizStart extends Component {
 
         questionObj.incorrect_answers.forEach(answer => choices.push(answer));
         choices = choices.sort(); // randomized array so that correct answer wont alway be first
-
+        this.currentChoices = choices;
         return choices.map((c, index) =>
             <CheckBox
                 title={c}
@@ -70,13 +72,27 @@ export default class QuizStart extends Component {
         )
     }
 
-    nextQuestion(){
-        const { currentIndex, questions } = this.state;
-        if(currentIndex < questions.length - 1){
-            this.setState({currentIndex: currentIndex + 1, selectAnswerIndex: ""})
-        }else{
-            Alert.alert("", "done")
+    nextQuestion() {
+        const { currentIndex, questions, selectAnswerIndex, score } = this.state;
+        if (questions[currentIndex].correct_answer === this.currentChoices[selectAnswerIndex]) {
+            this.setState({ score: score + 1 });
+            console.log("correct")
         }
+
+        if (currentIndex < questions.length - 1) {
+            this.setState({ currentIndex: currentIndex + 1, selectAnswerIndex: "" })
+        } else {
+            this.navigateAndUnmount("Result", { score, total: questions.length })
+        }
+    }
+
+    navigateAndUnmount(routeName, params) {
+        const resetAction = StackActions.reset({
+            index: 0,
+            actions: [NavigationActions.navigate({ routeName, params })],
+            key: null
+        });
+        this.props.navigation.dispatch(resetAction);
     }
 
     render() {

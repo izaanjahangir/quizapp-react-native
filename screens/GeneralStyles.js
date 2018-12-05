@@ -1,3 +1,5 @@
+import Variables from './Variables';
+
 const GeneralStyles = {
     container: {
         flexDirection: 'column',
@@ -29,6 +31,16 @@ const GeneralStyles = {
     },
     alignEnd: {
         alignItems: 'flex-end'
+    },
+    perfectlyCentered: {
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    fontWhite: {
+        color: Variables.fontColorLight
+    },
+    smallMarginTop: {
+        marginTop: 10
     }
 }
 

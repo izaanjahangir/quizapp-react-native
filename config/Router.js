@@ -4,8 +4,8 @@ import QuizStart from '../screens/QuizStart/QuizStart';
 import Result from '../screens/Result/Result';
 
 const Route = createStackNavigator({
-    Home: { screen: Home },
     QuizStart: { screen: QuizStart },
+    Home: { screen: Home },
     Result: { screen: Result },
 });
 
